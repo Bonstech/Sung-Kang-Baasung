@@ -1,0 +1,2450 @@
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sung Kang Baasung | Our Gallery</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .gallery-item {
+            transition: all 0.3s ease;
+            overflow: hidden;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+        }
+        
+        .gallery-item:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 10px 20px rgba(0, 0, 0, 0.15);
+        }
+        
+        .gallery-image {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+        
+        .gallery-item:hover .gallery-image {
+            transform: scale(1.05);
+        }
+        
+        .gallery-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0, 0, 0, 0.4);
+            color: white;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            opacity: 0;
+            transition: opacity 0.3s ease;
+            padding: 20px;
+            text-align: center;
+        }
+        
+        .gallery-item:hover .gallery-overlay {
+            opacity: 1;
+        }
+        
+        .filter-btn {
+            transition: all 0.3s ease;
+            border: 2px solid transparent;
+        }
+        
+        .filter-btn.active, .filter-btn:hover {
+            background-color: #EF4444;
+            color: white;
+            border-color: #EF4444;
+        }
+        
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.9);
+            overflow: hidden;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-content {
+            display: block;
+            margin: 60px auto;
+            max-width: 90%;
+            max-height: 80%;
+            border-radius: 8px;
+            box-shadow: 0 0 20px rgba(255, 255, 255, 0.2);
+        }
+        
+        .close-btn {
+            position: absolute;
+            top: 20px;
+            right: 30px;
+            color: white;
+            font-size: 40px;
+            cursor: pointer;
+            transition: color 0.3s ease;
+        }
+        
+        .close-btn:hover {
+            color: #EF4444;
+        }
+        
+        .caption {
+            margin: 15px auto;
+            text-align: center;
+            color: white;
+            font-size: 1.2rem;
+            max-width: 80%;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #EF4444;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .donate-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .donate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+        }
+
+        /* MoMo Modal Styles */
+        .momo-modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            transition: opacity 0.3s ease;
+        }
+        
+        .momo-modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: modalopen 0.4s;
+        }
+        
+        @keyframes modalopen {
+            from {opacity: 0; transform: translateY(-60px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        
+        .momo-close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        
+        .momo-close-btn:hover {
+            color: #000;
+        }
+        
+        .momo-details {
+            background: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px;
+            text-align: center;
+        }
+        
+        .momo-number {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .copy-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            padding: 8px 15px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Notification styles */
+        .copy-notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            background-color: #10B981;
+            color: white;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.5s ease;
+            z-index: 1000;
+        }
+        
+        .copy-notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .payment-steps {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 0 20px;
+            flex-wrap: wrap;
+        }
+        
+        .step {
+            text-align: center;
+            padding: 0 10px;
+            position: relative;
+            flex: 1;
+            min-width: 80px;
+            margin-bottom: 10px;
+        }
+        
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background-color: #EF4444;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+        }
+        
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            right: 0;
+            width: 70%;
+            height: 2px;
+            background-color: #E5E7EB;
+        }
+        
+        .step-text {
+            font-size: 12px;
+            color: #6B7280;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Notification for copy functionality -->
+    <div id="notification" class="notification hidden"></div>
+    
+    <!-- Header Section -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- Logo and Slogan -->
+             <div class="flex items-center space-x-2">
+                <a href="index.html" target="_blank">
+                <div class="w-14 h-14 bg-red-100 rounded-full flex items-center justify-center cursor-pointer">
+                    <span class="text-red-600 font-bold text-xl">
+                        <a href="index.html"><img src="image-container/LogoWhite.png" alt="Logo"></a>
+                    </span>
+                </div>
+                </a>
+                <div>
+                    <h1 class="font-bold text-lg text-[#3fbc06]">Sung Kang Baasung</h1>
+                    <p class="text-xs text-gray-600"><i>Empowering communities</i></p>
+                </div>
+            </div>
+            
+            <!-- Navigation Menu -->
+            <nav class="hidden md:flex space-x-8">
+                <a href="about.html" class="nav-link text-gray-700 font-medium hover:text-red-600">About Us</a>
+                <a href="#" class="nav-link text-gray-700 font-medium hover:text-red-600">Our Programs</a>
+                <a href="get-involved.html" class="nav-link text-gray-700 font-medium hover:text-red-600">Get Involved</a>
+                <!--<a href="#" class="nav-link text-gray-700 font-medium hover:text-red-600">News & Events</a>
+                <a href="#" class="nav-link text-gray-700 font-medium hover:text-red-600">Contact</a>-->
+            </nav>
+            
+            <!-- Donate Button -->
+            <button id="donateBtn" class="donate-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full">
+                Donate
+            </button>
+        </div>
+    </header>
+
+    <!-- Gallery Header Section -->
+    <section class="py-12 bg-gradient-to-r from-red-600 to-red-700 text-white">
+        <div class="container mx-auto px-4 text-center">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Our Gallery</h1>
+            <p class="text-xl max-w-3xl mx-auto">A visual journey of our mission to provide education for all children around the world</p>
+        </div>
+    </section>
+
+    <!-- Gallery Filters -->
+    <section class="py-8 bg-white shadow-sm">
+        <div class="container mx-auto px-4">
+            <div class="flex flex-wrap justify-center gap-3">
+                <button class="filter-btn active px-4 py-2 rounded-full bg-gray-100 text-gray-800 font-medium" data-filter="all">
+                    All Photos
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full bg-gray-100 text-gray-800 font-medium" data-filter="education">
+                    Education
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full bg-gray-100 text-gray-800 font-medium" data-filter="volunteers">
+                    Skill Trainings
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full bg-gray-100 text-gray-800 font-medium" data-filter="events">
+                    Events
+                </button>
+                <button class="filter-btn px-4 py-2 rounded-full bg-gray-100 text-gray-800 font-medium" data-filter="communities">
+                    Community
+                </button>
+            </div>
+        </div>
+    </section>
+
+    <!-- Gallery Grid -->
+    <section class="py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-6">
+                <!-- Gallery Item 1 -->
+                 <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/main.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Sensitization - Tour</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/main.jpg" data-caption="Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/001.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">ST Dominic R/C J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/001.jpg" data-caption="ST Dominic R/C J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduBaptist/001.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo Baptist J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduBaptist/001.jpg" data-caption="Kaleo Baptist J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDA/001.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo D/A J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDA/001.jpg" data-caption="Kaleo D/A J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/002.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">ST Dominic R/C J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/002.jpg" data-caption="ST Dominic R/C J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduBaptist/002.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo Baptist J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduBaptist/002.jpg" data-caption="Kaleo Baptist J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDA/002.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo D/A J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDA/002.jpg" data-caption="Kaleo D/A J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/003.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">ST Dominic R/C J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/003.jpg" data-caption="ST Dominic R/C J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduBaptist/003.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo Baptist J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduBaptist/003.jpg" data-caption="Kaleo Baptist J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDA/003.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo D/A J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDA/003.jpg" data-caption="Kaleo D/A J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/004.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">ST Dominic R/C J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/004.jpg" data-caption="ST Dominic R/C J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduBaptist/004.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo Baptist J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduBaptist/004.jpg" data-caption="Kaleo Baptist J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDA/004.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo D/A J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDA/004.jpg" data-caption="Kaleo D/A J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/005.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">ST Dominic R/C J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/005.jpg" data-caption="ST Dominic R/C J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduBaptist/005.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo Baptist J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduBaptist/005.jpg" data-caption="Kaleo Baptist J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDA/005.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo D/A J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDA/005.jpg" data-caption="Kaleo D/A J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/006.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">ST Dominic R/C J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/006.jpg" data-caption="ST Dominic R/C J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduBaptist/007.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo Baptist J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduBaptist/007.jpg" data-caption="Kaleo Baptist J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDA/007.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo D/A J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDA/007.jpg" data-caption="Kaleo D/A J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/008.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">ST Dominic R/C J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/008.jpg" data-caption="ST Dominic R/C J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduBaptist/008.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo Baptist J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduBaptist/008.jpg" data-caption="Kaleo Baptist J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDA/008.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo D/A J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDA/008.jpg" data-caption="Kaleo D/A J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/009.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">ST Dominic R/C J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/009.jpg" data-caption="ST Dominic R/C J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduBaptist/009.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo Baptist J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduBaptist/009.jpg" data-caption="Kaleo Baptist J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDA/009.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo D/A J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDA/009.jpg" data-caption="Kaleo D/A J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/010.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">ST Dominic R/C J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/010.jpg" data-caption="ST Dominic R/C J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduBaptist/010.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo Baptist J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduBaptist/010.jpg" data-caption="Kaleo Baptist J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDA/010.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo D/A J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDA/010.jpg" data-caption="Kaleo D/A J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/011.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">ST Dominic R/C J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/011.jpg" data-caption="ST Dominic R/C J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduBaptist/011.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo Baptist J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduBaptist/011.jpg" data-caption="Kaleo Baptist J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDA/011.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo D/A J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDA/011.jpg" data-caption="Kaleo D/A J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/012.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">ST Dominic R/C J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/012.jpg" data-caption="ST Dominic R/C J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduBaptist/012.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo Baptist J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduBaptist/012.jpg" data-caption="Kaleo Baptist J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDA/012.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo D/A J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDA/012.jpg" data-caption="Kaleo D/A J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/013.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">ST Dominic R/C J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/013.jpg" data-caption="ST Dominic R/C J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduBaptist/013.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo Baptist J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduBaptist/013.jpg" data-caption="Kaleo Baptist J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDA/013.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo D/A J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDA/013.jpg" data-caption="Kaleo D/A J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDominic/014.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">ST Dominic R/C J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDominic/014.jpg" data-caption="ST Dominic R/C J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="gallery-item relative" data-category="education">
+                    <img src="EduDA/015.jpg" 
+                         alt="Students in classroom" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Kaleo D/A J.H.S</h3>
+                        <p>Sensitization Tour</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="EduDA/015.jpg" data-caption="Kaleo D/A J.H.S - Sensitization Tour">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+            
+                
+                
+                <!-- Gallery Item 2 -->
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/main.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/main.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/001.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/001.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/002.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/002.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/003.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/003.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/004.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/004.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/005.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/005.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/006.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/006.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/007.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/007.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/008.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/008.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/009.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/009.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/010.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/010.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/011.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/011.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/012.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/012.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/013.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/013.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/014.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/014.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/015.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/015.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/016.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/016.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/017.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/017.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/018.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/018.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/019.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/019.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/020.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/020.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/021.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/021.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/022.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/022.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/023.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/023.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/024.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/024.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/025.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/025.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/026.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/026.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/027.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/027.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/028.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/028.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/029.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/029.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/030.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/030.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/031.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/031.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <div class="gallery-item relative" data-category="volunteers">
+                    <img src="Training/032.jpg" 
+                         alt="Skill Trainings" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Skills Training Workshop</h3>
+                        <p>Catch them young initiative</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Training/032.jpg" data-caption="Skills Training Workshop - Catch them young initiative">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                
+                <!-- Gallery Item 3 -->
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/main.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/main.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/001.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/001.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/001.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/001.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/002.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/002.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/002.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/002.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/003.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/003.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/003.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/003.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/004.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/004.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/004.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/004.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/005.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/005.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/006.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/006.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/007.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/007.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/008.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/008.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/009.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/009.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/009.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/009.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/010.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/010.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/011.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/011.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/012.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/012.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/012.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/012.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/013.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/013.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/013.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/013.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/014.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/014.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/014.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/014.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/015.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/015.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/015.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/015.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/016.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/016.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/016.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/016.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/017.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/017.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/017.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/017.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/018.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/018.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/019.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/019.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/020.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/020.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/020.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/020.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/021.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/021.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/021.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/021.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/022.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/022.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/022.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/022.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/023.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/023.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/023.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/023.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/024.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/024.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/024.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/024.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/025.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/025.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/025.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/025.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/026.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/026.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/026.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/026.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/027.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/027.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="MP/027.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Engagement with Hon. Anthony .M. Sumah</h3>
+                        <p>Youth empowerment, community development, and collaborative opportunities for sustainable growth</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="MP/027.jpg" data-caption="Engagement with Hon. Anthony .M. Sumah - Youth empowerment, community development, and collaborative opportunities for sustainable growth">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/028.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/028.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/029.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/029.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/030.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/030.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+               
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/031.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/031.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+               
+                <div class="gallery-item relative" data-category="events">
+                    <img src="Events/032.jpg" 
+                         alt="Events" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Parents and Guardians Engagement</h3>
+                        <p>The role of the parents</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Events/032.jpg" data-caption="Parents and Guardians Engagement - The role of the parents">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+
+                <!-- Gallery Item 4 -->
+                <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/001.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/001.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/002.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/002.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/003.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/003.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/004.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/004.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/005.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/005.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/006.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/006.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/007.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/007.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/008.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/008.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/009.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/009.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/010.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/010.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/011.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/011.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/012.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/012.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/013.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/013.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/014.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/014.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/015.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/015.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/016.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/016.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/017.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/017.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/018.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/018.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/019.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/019.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/020.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/020.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/021.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/021.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/022.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/022.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/023.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/023.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/024.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/024.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/025.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/025.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+
+                 <div class="gallery-item relative" data-category="communities">
+                    <img src="Needs/026.jpg" 
+                         alt="Community building" class="gallery-image">
+                    <div class="gallery-overlay">
+                        <h3 class="text-xl font-bold mb-2">Needs Assessment</h3>
+                        <p>Community building</p>
+                        <button class="mt-4 px-4 py-2 bg-red-600 text-white rounded-full view-image" data-src="Needs/026.jpg" data-caption="Needs Assessment - Community building">
+                            View Larger
+                        </button>
+                    </div>
+                </div>
+        </div>
+    </section>
+
+    <!-- Image Modal -->
+    <div id="imageModal" class="modal">
+        <span class="close-btn">&times;</span>
+        <img class="modal-content" id="modalImage">
+        <div id="modalCaption" class="caption"></div>
+    </div>
+
+    <!-- MoMo Modal -->
+    <div id="momoModal" class="momo-modal">
+        <div class="momo-modal-content">
+            <div class="flex justify-between items-center bg-red-600 text-white p-4 rounded-t-lg">
+                <h2 class="text-xl font-bold">Donate via Mobile Money</h2>
+                <span class="momo-close-btn">&times;</span>
+            </div>
+            
+            <div class="p-6">
+                <div class="momo-details">
+                    <div class="flex justify-center mb-4">
+                        <i class="fas fa-money-bill-wave text-4xl"></i>
+                    </div>
+                    <h3 class="text-lg font-semibold">Sung Kang Baasung Foundation</h3>
+                    <div class="momo-number">
+                        <span id="momoNumber">0530449548</span>
+                        <button id="copyBtn" class="copy-btn">
+                            <i class="fas fa-copy mr-1"></i> Copy
+                        </button>
+                    </div>
+                    <p class="text-sm opacity-90">Please use your name as reference when sending</p>
+                </div>
+                
+                <div class="payment-steps">
+                    <div class="step">
+                        <div class="step-number">1</div>
+                        <div class="step-text">Copy MoMo number</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">2</div>
+                        <div class="step-text">Open Momo App</div>
+                    </div>
+                    
+                    <div class="step">
+                        <div class="step-number">3</div>
+                        <div class="step-text">Paste momo number</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">4</div>
+                        <div class="step-text">Verify momo name</div>
+                    </div>
+                    <div class="step">
+                        <div class="step-number">5</div>
+                        <div class="step-text">Send payment</div>
+                    </div>
+                </div>
+                
+                <div class="mt-6 text-center">
+                    <button class="momo-close-btn bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-full">
+                        Close
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+   <footer class="bg-gray-800 text-white py-12">
+        <div class="container mx-auto px-4">
+            <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-8">
+                <div>
+                    <h3 class="text-xl font-bold mb-4"><i>Sung Kang Baasung</i></h3>
+                    <p class="text-xs text-gray-400">Dedicated to empowering  communities through education, health and sustainable development projects. Together, we build a better future.</p>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Quick Links</h3>
+                    <ul class="space-y-2">
+                        <li><a href="about.html" class="text-gray-400 hover:text-white">About Us</a></li>
+                        <li><a href="#" class="text-gray-400 hover:text-white">Programs</a></li>
+                        <!--<li><a href="#" class="text-gray-400 hover:text-white">News & Events</a></li>-->
+                        <li><a href="get-involved.html" class="text-gray-400 hover:text-white">Get Involved</a></li>
+                    </ul>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Contact Us</h3>
+                    <address class="text-gray-400 not-italic">
+                        <a class="hover:text-white cursor-pointer" href="mailto:sungkangbaasung97@gmail.com">sungkangbaasung97@gmail.com</a><br>
+                        <a class="hover:text-white cursor-pointer" href="tel:+233241234567">+233 (0) 24 123 4567<br></a>
+                        Accra, Ghana<br>
+                    </address>
+                </div>
+                
+                <div>
+                    <h3 class="text-xl font-bold mb-4">Connect with us</h3>
+                    <div class="flex flex-row space-x-2">
+                        <div class="p-x-2 rounded-full hover:bg-white cursor-pointer">
+                            <a href="https://wa.link/tkpy51" target="_blank">
+                           <svg width="40px" height="40px" viewBox="-1.5 0 259 259" version="1.1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" preserveAspectRatio="xMidYMid" fill="#000000"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <g> <path d="M67.6631045,221.823373 L71.8484512,223.916047 C89.2873956,234.379413 108.819013,239.262318 128.350631,239.262318 L128.350631,239.262318 C189.735716,239.262318 239.959876,189.038158 239.959876,127.653073 C239.959876,98.3556467 228.101393,69.7557778 207.17466,48.8290445 C186.247927,27.9023111 158.345616,16.0438289 128.350631,16.0438289 C66.9655467,16.0438289 16.7413867,66.2679889 17.4389445,128.350631 C17.4389445,149.277365 23.7169645,169.50654 34.1803311,186.945485 L36.9705622,191.130831 L25.8096378,232.28674 L67.6631045,221.823373 Z" fill="#00E676"> </path> <path d="M219.033142,37.66812 C195.316178,13.2535978 162.530962,0 129.048189,0 C57.8972956,0 0.697557778,57.8972956 1.39511556,128.350631 C1.39511556,150.67248 7.67313556,172.296771 18.1365022,191.828389 L0,258.096378 L67.6631045,240.657433 C86.4971645,251.1208 107.423898,256.003705 128.350631,256.003705 L128.350631,256.003705 C198.803967,256.003705 256.003705,198.106409 256.003705,127.653073 C256.003705,93.4727423 242.750107,61.3850845 219.033142,37.66812 Z M129.048189,234.379413 L129.048189,234.379413 C110.214129,234.379413 91.380069,229.496509 75.3362401,219.7307 L71.1508934,217.638027 L30.6925422,228.101393 L41.1559089,188.3406 L38.3656778,184.155253 C7.67313556,134.628651 22.3218489,69.05822 72.5460089,38.3656778 C122.770169,7.67313556 187.643042,22.3218489 218.335585,72.5460089 C249.028127,122.770169 234.379413,187.643042 184.155253,218.335585 C168.111425,228.798951 148.579807,234.379413 129.048189,234.379413 Z M190.433273,156.9505 L182.760138,153.462711 C182.760138,153.462711 171.599213,148.579807 164.623636,145.092018 C163.926078,145.092018 163.22852,144.39446 162.530962,144.39446 C160.438289,144.39446 159.043173,145.092018 157.648058,145.789576 L157.648058,145.789576 C157.648058,145.789576 156.9505,146.487133 147.184691,157.648058 C146.487133,159.043173 145.092018,159.740731 143.696902,159.740731 L142.999345,159.740731 C142.301787,159.740731 140.906671,159.043173 140.209113,158.345616 L136.721325,156.9505 L136.721325,156.9505 C129.048189,153.462711 122.072611,149.277365 116.492149,143.696902 C115.097033,142.301787 113.00436,140.906671 111.609245,139.511556 C106.72634,134.628651 101.843436,129.048189 98.3556467,122.770169 L97.658089,121.375053 C96.9605312,120.677496 96.9605312,119.979938 96.2629734,118.584822 C96.2629734,117.189707 96.2629734,115.794591 96.9605312,115.097033 C96.9605312,115.097033 99.7507623,111.609245 101.843436,109.516571 C103.238551,108.121456 103.936109,106.028782 105.331225,104.633667 C106.72634,102.540993 107.423898,99.7507623 106.72634,97.658089 C106.028782,94.1703001 97.658089,75.3362401 95.5654156,71.1508934 C94.1703001,69.05822 92.7751845,68.3606623 90.6825112,67.6631045 L88.5898378,67.6631045 C87.1947223,67.6631045 85.1020489,67.6631045 83.0093756,67.6631045 C81.6142601,67.6631045 80.2191445,68.3606623 78.8240289,68.3606623 L78.1264712,69.05822 C76.7313556,69.7557778 75.3362401,71.1508934 73.9411245,71.8484512 C72.5460089,73.2435667 71.8484512,74.6386823 70.4533356,76.0337978 C65.5704312,82.3118178 62.7802,89.9849534 62.7802,97.658089 L62.7802,97.658089 C62.7802,103.238551 64.1753156,108.819013 66.2679889,113.701918 L66.9655467,115.794591 C73.2435667,129.048189 81.6142601,140.906671 92.7751845,151.370038 L95.5654156,154.160269 C97.658089,156.252942 99.7507623,157.648058 101.145878,159.740731 C115.794591,172.296771 132.535978,181.365022 151.370038,186.247927 C153.462711,186.945485 156.252942,186.945485 158.345616,187.643042 L158.345616,187.643042 C160.438289,187.643042 163.22852,187.643042 165.321193,187.643042 C168.808982,187.643042 172.994329,186.247927 175.78456,184.852811 C177.877233,183.457696 179.272349,183.457696 180.667465,182.06258 L182.06258,180.667465 C183.457696,179.272349 184.852811,178.574791 186.247927,177.179676 C187.643042,175.78456 189.038158,174.389445 189.735716,172.994329 C191.130831,170.204098 191.828389,166.716309 192.525947,163.22852 C192.525947,161.833405 192.525947,159.740731 192.525947,158.345616 C192.525947,158.345616 191.828389,157.648058 190.433273,156.9505 Z" fill="#FFFFFF"> </path> </g> </g></svg>
+                            </a>
+                        </div>
+                        <div class="p-x-2 rounded-full hover:bg-white cursor-pointer">
+                            <a href="https://www.linkedin.com/in/cajetan-dumba-57a57b2b9?utm_source=share&utm_campaign=share_via&utm_content=profile&utm_medium=android_app" target="_blank">
+                            <svg width="44px" height="44px" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <rect x="2" y="2" width="28" height="28" rx="14" fill="#1275B1"></rect> <path d="M12.6186 9.69215C12.6186 10.6267 11.8085 11.3843 10.8093 11.3843C9.81004 11.3843 9 10.6267 9 9.69215C9 8.7576 9.81004 8 10.8093 8C11.8085 8 12.6186 8.7576 12.6186 9.69215Z" fill="white"></path> <path d="M9.24742 12.6281H12.3402V22H9.24742V12.6281Z" fill="white"></path> <path d="M17.3196 12.6281H14.2268V22H17.3196C17.3196 22 17.3196 19.0496 17.3196 17.2049C17.3196 16.0976 17.6977 14.9855 19.2062 14.9855C20.911 14.9855 20.9008 16.4345 20.8928 17.5571C20.8824 19.0244 20.9072 20.5219 20.9072 22H24V17.0537C23.9738 13.8954 23.1508 12.4401 20.4433 12.4401C18.8354 12.4401 17.8387 13.1701 17.3196 13.8305V12.6281Z" fill="white"></path> </g></svg>
+                           </a>
+                        </div>
+                        <div class="p-x-2 rounded-full hover:bg-white cursor-pointer">
+                            <a href="https://www.facebook.com/share/19UuT35PPj/?mibextid=wwXIfr" target="_blank">
+                            <svg width="44px" height="44px" viewBox="0 0 32 32" fill="none" xmlns="http://www.w3.org/2000/svg"><g id="SVGRepo_bgCarrier" stroke-width="0"></g><g id="SVGRepo_tracerCarrier" stroke-linecap="round" stroke-linejoin="round"></g><g id="SVGRepo_iconCarrier"> <circle cx="16" cy="16" r="14" fill="url(#paint0_linear_87_7208)"></circle> <path d="M21.2137 20.2816L21.8356 16.3301H17.9452V13.767C17.9452 12.6857 18.4877 11.6311 20.2302 11.6311H22V8.26699C22 8.26699 20.3945 8 18.8603 8C15.6548 8 13.5617 9.89294 13.5617 13.3184V16.3301H10V20.2816H13.5617V29.8345C14.2767 29.944 15.0082 30 15.7534 30C16.4986 30 17.2302 29.944 17.9452 29.8345V20.2816H21.2137Z" fill="white"></path> <defs> <linearGradient id="paint0_linear_87_7208" x1="16" y1="2" x2="16" y2="29.917" gradientUnits="userSpaceOnUse"> <stop stop-color="#18ACFE"></stop> <stop offset="1" stop-color="#0163E0"></stop> </linearGradient> </defs> </g></svg>
+                            </a>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <div class="border-t border-gray-700 mt-8 pt-8 text-center text-gray-400">
+                <p>&copy; 2024 Sung Kang Baasung. All rights reserved. | Making a difference in communities across Ghana.</p>
+            </div>
+        </div>
+    </footer>
+
+    <script>
+        const momoModal = document.getElementById('momoModal');
+        const closeBtn = document.querySelector('.momo-close-btn');
+        const copyBtn = document.getElementById('copyBtn');
+        const donateMomoBtn = document.querySelector('.donate-momo-btn');
+        // Gallery Filter Functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const filterButtons = document.querySelectorAll('.filter-btn');
+            const galleryItems = document.querySelectorAll('.gallery-item');
+            
+            filterButtons.forEach(button => {
+                button.addEventListener('click', () => {
+                    // Remove active class from all buttons
+                    filterButtons.forEach(btn => btn.classList.remove('active'));
+                    
+                    // Add active class to clicked button
+                    button.classList.add('active');
+                    
+                    const filter = button.getAttribute('data-filter');
+                    
+                    // Show or hide gallery items based on filter
+                    galleryItems.forEach(item => {
+                        if (filter === 'all' || item.getAttribute('data-category') === filter) {
+                            item.style.display = 'block';
+                        } else {
+                            item.style.display = 'none';
+                        }
+                    });
+                });
+            });
+            
+            // Modal functionality
+            const modal = document.getElementById('imageModal');
+            const modalImg = document.getElementById('modalImage');
+            const captionText = document.getElementById('modalCaption');
+            const closeBtn = document.querySelector('.close-btn');
+            
+            document.querySelectorAll('.view-image').forEach(button => {
+                button.addEventListener('click', function() {
+                    modal.style.display = 'block';
+                    modalImg.src = this.getAttribute('data-src');
+                    captionText.innerHTML = this.getAttribute('data-caption');
+                });
+            });
+            
+            closeBtn.addEventListener('click', function() {
+                modal.style.display = 'none';
+            });
+            
+            // Close modal when clicking outside the image
+            window.addEventListener('click', function(event) {
+                if (event.target === modal) {
+                    modal.style.display = 'none';
+                }
+            });
+            
+            // Close modal with Escape key
+            document.addEventListener('keydown', function(event) {
+                if (event.key === 'Escape' && modal.style.display === 'block') {
+                    modal.style.display = 'none';
+                }
+            });
+        });
+
+        // Open modal when donate button is clicked
+        if (donateBtn) {
+            donateBtn.addEventListener('click', function() {
+                momoModal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            });
+        }
+        
+        // Also open modal when MoMo button is clicked
+        if (donateMomoBtn) {
+            donateMomoBtn.addEventListener('click', function() {
+                momoModal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            });
+        }
+        
+        // Close modal when close button is clicked
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                momoModal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Enable scrolling
+            });
+        }
+        
+        // Close modal when clicking outside the modal content
+        window.addEventListener('click', function(event) {
+            if (event.target === momoModal) {
+                momoModal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Enable scrolling
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && momoModal.style.display === 'block') {
+                momoModal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Enable scrolling
+            }
+        });
+        
+        // Copy MoMo number to clipboard
+        if (copyBtn) {
+            copyBtn.addEventListener('click', function() {
+                const momoNumber = document.getElementById('momoNumber').textContent;
+                
+                // Use the Clipboard API to copy text
+                navigator.clipboard.writeText(momoNumber).then(function() {
+                    // Show success notification
+                    notification.classList.add('show');
+                    
+                    // Change button text temporarily
+                    copyBtn.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
+                    
+                    // Reset button after 2 seconds
+                    setTimeout(function() {
+                        notification.classList.remove('show');
+                        copyBtn.innerHTML = '<i class="fas fa-copy mr-1"></i> Copy';
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy: ', err);
+                    alert('Failed to copy MoMo number. Please manually select and copy it.');
+                });
+            });
+        }
+        
+        // Additional animation for donate buttons
+        document.querySelectorAll('.donate-btn, .donate-momo-btn').forEach(btn => {
+            btn.addEventListener('mouseover', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+            
+            btn.addEventListener('mouseout', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>

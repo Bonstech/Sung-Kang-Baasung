@@ -1,0 +1,9 @@
+CREATE DATABASE sung_db;
+
+USE sung_db;
+
+CREATE TABLE subscribers (
+    id INT(11) AUTO_INCREMENT PRIMARY KEY,
+    email VARCHAR(255) NOT NULL UNIQUE,
+    subscribed_at TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+);

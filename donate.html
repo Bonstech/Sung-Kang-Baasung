@@ -1,0 +1,482 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Donate | Sung Kang Baasung Foundation</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap');
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            scroll-behavior: smooth;
+        }
+        
+        .hero-section {
+            background-image: linear-gradient(rgba(0, 0, 0, 0.6), rgba(0, 0, 0, 0.6)), url('https://images.unsplash.com/photo-1523240795612-9a054b0db644?ixlib=rb-4.0.3&auto=format&fit=crop&w=1920&q=80');
+            background-size: cover;
+            background-position: center;
+            height: 50vh;
+            display: flex;
+            align-items: center;
+        }
+        
+        .donate-option {
+            transition: all 0.3s ease;
+            border-radius: 12px;
+            overflow: hidden;
+            height: 100%;
+        }
+        
+        .donate-option:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 30px rgba(0, 0, 0, 0.15);
+        }
+        
+        .donate-icon {
+            width: 80px;
+            height: 80px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            background-color: #FEF3C7;
+            border: 2px solid #F59E0B;
+            font-size: 30px;
+            color: #B45309;
+        }
+        
+        .nav-link {
+            position: relative;
+        }
+        
+        .nav-link::after {
+            content: '';
+            position: absolute;
+            width: 0;
+            height: 2px;
+            bottom: -4px;
+            left: 0;
+            background-color: #EF4444;
+            transition: width 0.3s ease;
+        }
+        
+        .nav-link:hover::after {
+            width: 100%;
+        }
+        
+        .donate-btn {
+            transition: all 0.3s ease;
+        }
+        
+        .donate-btn:hover {
+            transform: scale(1.05);
+            box-shadow: 0 4px 12px rgba(220, 38, 38, 0.4);
+        }
+        
+        /* Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            overflow: hidden;
+            transition: opacity 0.3s ease;
+        }
+        
+        .modal-content {
+            background-color: #fff;
+            margin: 10% auto;
+            padding: 0;
+            border-radius: 12px;
+            width: 90%;
+            max-width: 500px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.3);
+            animation: modalopen 0.4s;
+        }
+        
+        @keyframes modalopen {
+            from {opacity: 0; transform: translateY(-60px);}
+            to {opacity: 1; transform: translateY(0);}
+        }
+        
+        .close-btn {
+            color: #aaa;
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            padding: 10px 20px;
+            cursor: pointer;
+        }
+        
+        .close-btn:hover {
+            color: #000;
+        }
+        
+        .momo-details {
+            background: linear-gradient(135deg, #8E2DE2 0%, #4A00E0 100%);
+            color: white;
+            padding: 25px;
+            border-radius: 8px;
+            margin: 20px;
+            text-align: center;
+        }
+        
+        .momo-number {
+            font-size: 24px;
+            font-weight: bold;
+            letter-spacing: 1px;
+            margin: 15px 0;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+        
+        .copy-btn {
+            background-color: rgba(255, 255, 255, 0.2);
+            border: none;
+            border-radius: 4px;
+            color: white;
+            padding: 8px 15px;
+            margin-left: 10px;
+            cursor: pointer;
+            transition: all 0.3s;
+        }
+        
+        .copy-btn:hover {
+            background-color: rgba(255, 255, 255, 0.3);
+        }
+        
+        .notification {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            padding: 15px 25px;
+            border-radius: 8px;
+            background-color: #10B981;
+            color: white;
+            font-weight: 500;
+            opacity: 0;
+            transform: translateY(100%);
+            transition: all 0.5s ease;
+            z-index: 1000;
+        }
+        
+        .notification.show {
+            opacity: 1;
+            transform: translateY(0);
+        }
+        
+        .payment-steps {
+            display: flex;
+            justify-content: center;
+            margin: 20px 0;
+            padding: 0 20px;
+        }
+        
+        .step {
+            text-align: center;
+            padding: 0 15px;
+            position: relative;
+            flex: 1;
+        }
+        
+        .step-number {
+            width: 36px;
+            height: 36px;
+            background-color: #EF4444;
+            color: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 10px;
+            font-weight: bold;
+        }
+        
+        .step:not(:last-child)::after {
+            content: '';
+            position: absolute;
+            top: 18px;
+            right: 0;
+            width: 70%;
+            height: 2px;
+            background-color: #E5E7EB;
+        }
+        
+        .step-text {
+            font-size: 14px;
+            color: #6B7280;
+        }
+    </style>
+</head>
+<body class="bg-gray-50">
+    <!-- Notification -->
+    <div id="notification" class="notification">
+        <i class="fas fa-check-circle mr-2"></i> MoMo number copied to clipboard!
+    </div>
+    
+    <!-- Header Section -->
+    <header class="bg-white shadow-md sticky top-0 z-50">
+        <div class="container mx-auto px-4 py-3 flex items-center justify-between">
+            <!-- Logo and Slogan -->
+            <div class="flex items-center space-x-2">
+                <div class="w-12 h-12 bg-red-100 rounded-full flex items-center justify-center">
+                    <span class="text-red-600 font-bold text-xl">SKB</span>
+                </div>
+                <div>
+                    <h1 class="font-bold text-lg text-gray-800">Sung Kang Baasung Foundation</h1>
+                    <p class="text-xs text-gray-600">Empowering youth, transforming communities</p>
+                </div>
+            </div>
+            
+            <!-- Navigation Menu -->
+            <nav class="hidden md:flex space-x-8">
+                <a href="index.html" class="nav-link text-gray-700 font-medium hover:text-red-600">Home</a>
+                <a href="about.html" class="nav-link text-gray-700 font-medium hover:text-red-600">About Us</a>
+                <a href="programs.html" class="nav-link text-gray-700 font-medium hover:text-red-600">Our Programs</a>
+                <a href="get-involved.html" class="nav-link text-red-600 font-medium">Get Involved</a>
+                <a href="news.html" class="nav-link text-gray-700 font-medium hover:text-red-600">News & Events</a>
+                <a href="contact.html" class="nav-link text-gray-700 font-medium hover:text-red-600">Contact</a>
+            </nav>
+            
+            <!-- Donate Button -->
+            <button id="donateBtn" class="donate-btn bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full">
+                Donate
+            </button>
+        </div>
+    </header>
+
+    <!-- Hero Section -->
+    <section class="hero-section">
+        <div class="container mx-auto px-4 text-center text-white">
+            <h1 class="text-4xl md:text-5xl font-bold mb-4">Support Our Cause</h1>
+            <p class="text-xl max-w-3xl mx-auto">Your donation helps us empower youth and transform communities through education and skills development</p>
+        </div>
+    </section>
+
+    <!-- Donation Options -->
+    <section class="py-16 bg-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center text-gray-800 mb-4">Ways to Donate</h2>
+            <p class="text-lg text-gray-600 text-center max-w-3xl mx-auto mb-12">Choose the donation method that works best for you</p>
+            
+            <div class="grid grid-cols-1 md:grid-cols-3 gap-8">
+                <!-- Mobile Money -->
+                <div class="donate-option bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                    <div class="donate-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">Mobile Money</h3>
+                    <p class="text-gray-600 text-center mb-6">Donate quickly and securely using Mobile Money (MoMo)</p>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center">
+                            <span class="bg-red-100 text-red-600 rounded-full p-1 mr-3"><i class="fas fa-check-circle"></i></span>
+                            <span>Instant transfer</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="bg-red-100 text-red-600 rounded-full p-1 mr-3"><i class="fas fa-check-circle"></i></span>
+                            <span>Secure payment</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="bg-red-100 text-red-600 rounded-full p-1 mr-3"><i class="fas fa-check-circle"></i></span>
+                            <span>Immediate confirmation</span>
+                        </li>
+                    </ul>
+                    <button class="donate-momo-btn w-full bg-red-600 hover:bg-red-700 text-white font-bold py-3 px-6 rounded-full">
+                        Donate with MoMo
+                    </button>
+                </div>
+                
+                <!-- Bank Transfer -->
+                <div class="donate-option bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                    <div class="donate-icon">
+                        <i class="fas fa-university"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">Bank Transfer</h3>
+                    <p class="text-gray-600 text-center mb-6">Transfer funds directly to our bank account</p>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center">
+                            <span class="bg-red-100 text-red-600 rounded-full p-1 mr-3"><i class="fas fa-check-circle"></i></span>
+                            <span>Domestic & international</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="bg-red-100 text-red-600 rounded-full p-1 mr-3"><i class="fas fa-check-circle"></i></span>
+                            <span>Recurring transfers available</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="bg-red-100 text-red-600 rounded-full p-1 mr-3"><i class="fas fa-check-circle"></i></span>
+                            <span>Receipt provided</span>
+                        </li>
+                    </ul>
+                    <button class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-full">
+                        View Bank Details
+                    </button>
+                </div>
+                
+                <!-- In Person -->
+                <div class="donate-option bg-white p-8 rounded-xl shadow-md border border-gray-100">
+                    <div class="donate-icon">
+                        <i class="fas fa-hand-holding-heart"></i>
+                    </div>
+                    <h3 class="text-2xl font-bold text-center text-gray-800 mb-4">In Person</h3>
+                    <p class="text-gray-600 text-center mb-6">Visit our office to make a donation in person</p>
+                    <ul class="space-y-3 mb-6">
+                        <li class="flex items-center">
+                            <span class="bg-red-100 text-red-600 rounded-full p-1 mr-3"><i class="fas fa-check-circle"></i></span>
+                            <span>Cash donations accepted</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="bg-red-100 text-red-600 rounded-full p-1 mr-3"><i class="fas fa-check-circle"></i></span>
+                            <span>See our work firsthand</span>
+                        </li>
+                        <li class="flex items-center">
+                            <span class="bg-red-100 text-red-600 rounded-full p-1 mr-3"><i class="fas fa-check-circle"></i></span>
+                            <span>Meet our team</span>
+                        </li>
+                    </ul>
+                    <button class="w-full bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-3 px-6 rounded-full">
+                        Get Directions
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Impact Section -->
+    <section class="py-16 bg-gradient-to-r from-red-600 to-red-700 text-white">
+        <div class="container mx-auto px-4">
+            <h2 class="text-3xl md:text-4xl font-bold text-center mb-12">Your Donation Makes a Difference</h2>
+            
+            <div class="grid grid-cols-2 md:grid-cols-4 gap-8 text-center">
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2">$50</div>
+                    <p class="text-xl">Provides school supplies for 5 students</p>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2">$100</div>
+                    <p class="text-xl">Sponsors a youth training workshop</p>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2">$250</div>
+                    <p class="text-xl">Funds a community outreach program</p>
+                </div>
+                <div>
+                    <div class="text-4xl md:text-5xl font-bold mb-2">$500</div>
+                    <p class="text-xl">Supports a month of mentorship activities</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- MoMo Donation Modal -->
+    
+                
+                <div class="mt-6 text-center">
+                    <p class="text-gray-600 mb-4">After making your donation, please fill out our form to receive a receipt</p>
+                    <button class="bg-gray-200 hover:bg-gray-300 text-gray-800 font-bold py-2 px-6 rounded-full mr-3">
+                        I've Donated
+                    </button>
+                    <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-6 rounded-full">
+                        Cancel
+                    </button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+    <script>
+        // Get DOM elements
+        const donateBtn = document.getElementById('donateBtn');
+        const momoModal = document.getElementById('momoModal');
+        const closeBtn = document.querySelector('.close-btn');
+        const copyBtn = document.getElementById('copyBtn');
+        const notification = document.getElementById('notification');
+        const donateMomoBtn = document.querySelector('.donate-momo-btn');
+        
+        // Open modal when donate button is clicked
+        if (donateBtn) {
+            donateBtn.addEventListener('click', function() {
+                momoModal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            });
+        }
+        
+        // Also open modal when MoMo button is clicked
+        if (donateMomoBtn) {
+            donateMomoBtn.addEventListener('click', function() {
+                momoModal.style.display = 'block';
+                document.body.style.overflow = 'hidden'; // Prevent scrolling
+            });
+        }
+        
+        // Close modal when close button is clicked
+        if (closeBtn) {
+            closeBtn.addEventListener('click', function() {
+                momoModal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Enable scrolling
+            });
+        }
+        
+        // Close modal when clicking outside the modal content
+        window.addEventListener('click', function(event) {
+            if (event.target === momoModal) {
+                momoModal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Enable scrolling
+            }
+        });
+        
+        // Close modal with Escape key
+        document.addEventListener('keydown', function(event) {
+            if (event.key === 'Escape' && momoModal.style.display === 'block') {
+                momoModal.style.display = 'none';
+                document.body.style.overflow = 'auto'; // Enable scrolling
+            }
+        });
+        
+        // Copy MoMo number to clipboard
+        if (copyBtn) {
+            copyBtn.addEventListener('click', function() {
+                const momoNumber = document.getElementById('momoNumber').textContent;
+                
+                // Use the Clipboard API to copy text
+                navigator.clipboard.writeText(momoNumber).then(function() {
+                    // Show success notification
+                    notification.classList.add('show');
+                    
+                    // Change button text temporarily
+                    copyBtn.innerHTML = '<i class="fas fa-check mr-1"></i> Copied!';
+                    
+                    // Reset button after 2 seconds
+                    setTimeout(function() {
+                        notification.classList.remove('show');
+                        copyBtn.innerHTML = '<i class="fas fa-copy mr-1"></i> Copy';
+                    }, 2000);
+                }).catch(function(err) {
+                    console.error('Failed to copy: ', err);
+                    alert('Failed to copy MoMo number. Please manually select and copy it.');
+                });
+            });
+        }
+        
+        // Additional animation for donate buttons
+        document.querySelectorAll('.donate-btn, .donate-momo-btn').forEach(btn => {
+            btn.addEventListener('mouseover', function() {
+                this.style.transform = 'scale(1.05)';
+            });
+            
+            btn.addEventListener('mouseout', function() {
+                this.style.transform = 'scale(1)';
+            });
+        });
+    </script>
+</body>
+</html>
